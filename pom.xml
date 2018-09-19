@@ -4,8 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.attrition.prediction</groupId>
-	<artifactId>EmployeeAttritionPredictionApp</artifactId>
-	<packaging>war</packaging>
+	<artifactId>EmployeeAttritionPredictionApp</artifactId>	
 	<version>1.0.0</version>
 	<name>EmployeeAttritionPredictionApp</name>
 
@@ -121,28 +120,41 @@
 	</dependencies>
 
 	<build>
-		<pluginManagement>
-			<plugins>
+		<pluginManagement>		 
+	        	<plugins>	         	         
 				<plugin>
-			        <groupId>org.apache.maven.plugins</groupId>
-			        <artifactId>maven-compiler-plugin</artifactId>
-			        <version>3.2</version>
-			        <configuration>
-			            <source>1.6</source>
-			            <target>1.6</target>
-			        </configuration>
-			    </plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.4</version>
+					<groupId>com.microsoft.azure</groupId>
+					<artifactId>azure-webapp-maven-plugin</artifactId>           
+					<version>1.3.0</version>
 					<configuration>
-						<warSourceDirectory>src/main/webapp</warSourceDirectory>
-						<warName>EmployeeAttritionPredictionApp</warName>
-						<failOnMissingWebXml>false</failOnMissingWebXml>
-					</configuration>
-				</plugin>
-			</plugins>
+						<deploymentType>ftp</deploymentType>
+						<resources>
+						<resource>
+						<directory>${project.basedir}/target</directory>
+						<targetPath>webapps</targetPath>
+						<includes>
+						<include>*.war</include>
+						</includes>
+						<excludes>
+						<exclude>*.xml</exclude>
+						</excludes>
+						</resource>
+						</resources>				     
+					 </configuration>			         
+		         	</plugin>
+		         		         
+				 <plugin>
+				     <groupId>com.microsoft.azure</groupId>
+				     <artifactId>azure-webapp-maven-plugin</artifactId>
+				     <configuration>	               
+					<resourceGroup>EmployeeAttritionPredictionAppa2c3</resourceGroup>
+					<appName>EmployeeAttritionPredictionApp</appName>	                
+					<linuxRuntime>tomcat 8.5-jre8</linuxRuntime>
+				     </configuration>
+				 </plugin>
+	             		         
+	         	</plugins>
+	         
 		</pluginManagement>
 		<finalName>EmployeeAttritionPredictionApp</finalName>
 	</build>
