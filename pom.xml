@@ -4,7 +4,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.attrition.prediction</groupId>
-	<artifactId>EmployeeAttritionPredictionApp</artifactId>	
+	<artifactId>EmployeeAttritionPredictionApp</artifactId>
+	<name>EmployeeAttritionPredictionApp</name>
 	<version>1.0.0</version>
 	<name>EmployeeAttritionPredictionApp</name>
 
@@ -117,45 +118,75 @@
 		    <version>1.2</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-storage</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
-		<pluginManagement>		 
-	        	<plugins>	         	         
-				<plugin>
-					<groupId>com.microsoft.azure</groupId>
-					<artifactId>azure-webapp-maven-plugin</artifactId>           
-					<version>1.3.0</version>
-					<configuration>
-						<deploymentType>ftp</deploymentType>
-						<resources>
-						<resource>
-						<directory>${project.basedir}/target</directory>
-						<targetPath>webapps</targetPath>
-						<includes>
-						<include>*.war</include>
-						</includes>
-						<excludes>
-						<exclude>*.xml</exclude>
-						</excludes>
-						</resource>
-						</resources>				     
-					 </configuration>			         
-		         	</plugin>
-		         		         
-				 <plugin>
-				     <groupId>com.microsoft.azure</groupId>
-				     <artifactId>azure-webapp-maven-plugin</artifactId>
-				     <configuration>	               
-					<resourceGroup>EmployeeAttritionPredictionAppa2c3</resourceGroup>
-					<appName>EmployeeAttritionPredictionApp</appName>	                
-					<linuxRuntime>tomcat 8.5-jre8</linuxRuntime>
-				     </configuration>
-				 </plugin>
-	             		         
-	         	</plugins>
-	         
-		</pluginManagement>
-		<finalName>EmployeeAttritionPredictionApp</finalName>
-	</build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0</version>
+			</extension>
+		</extensions>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<port>8080</port>
+					<path>/</path>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>vfs-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<id>remove-old-root</id>
+						<phase>install</phase>
+						<goals>
+							<goal>remove</goal>
+						</goals>
+						<configuration>
+							<fileset>
+								<sourceId>EmployeeAttritionPredictionApp</sourceId>
+								<source>${azureFtpUrl}/webapps</source>
+							</fileset>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>upload-war</id>
+						<phase>install</phase>
+						<goals>
+							<goal>upload-single</goal>
+						</goals>
+						<configuration>
+							<fromFile>${basedir}/target/AzureAppDemo-0.0.1-SNAPSHOT.war</fromFile>
+							<url>${azureFtpUrl}</url>
+							<toFile>webapps/ROOT.war</toFile>
+							<serverId>EmployeeAttritionPredictionApp</serverId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>	
 </project>
