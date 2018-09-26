@@ -4,8 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.attrition.prediction</groupId>
-	<artifactId>EmployeeAttritionPredictionApp</artifactId>
-	<name>EmployeeAttritionPredictionApp</name>
+	<artifactId>EmployeeAttritionPredictionApp</artifactId>	
 	<version>1.0.0</version>
 	<name>EmployeeAttritionPredictionApp</name>
 
